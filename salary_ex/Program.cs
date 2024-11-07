@@ -62,7 +62,26 @@
         // 사원 근무 부서 수정
         static void ChangeDepart(worker[] w)
         {
-            
+            Console.WriteLine("현재 사원 근무 부서");
+            for (int i = 0; i < 30; i++)
+            {
+                if (w[i].name != null)
+                {
+                    Console.WriteLine("{0}:{1}:{2}", i + 1, w[i].name, w[i].depart);
+                }
+            }
+            Console.Write("수정할 사원의; 사원번호를 입력하세요");
+            int n = int.Parse(Console.ReadLine());
+            if(0<n && n < 30)
+            {
+                Console.Write("새로운 부서를 입력하세요");
+                string newdepart = Console.ReadLine();
+                w[n - 1].depart = newdepart; // 선택한 사원 부서 변경
+            }
+            else
+            {
+                Console.WriteLine("사원 번호는 1~30번을 사용하세요");
+            }
         }
         // 사원 근무 년수 수정
         static void ChangeWorkeyear(worker[] w)
