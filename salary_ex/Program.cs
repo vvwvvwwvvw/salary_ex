@@ -15,7 +15,25 @@
         // 사원등록
         static void AddWorker(worker[] w)
         {
-
+            Console.Write("사원번호를 입력하세요(1~30)"); // 사원 번호는 1~30번으로 정의.
+            int n = int.Parse(Console.ReadLine());
+            if (0 < n && n < 31)
+            {
+                Console.Write("이름을 입력하세요");
+                w[n = 1].name = Console.ReadLine();
+                Console.Write("직급을 입력 하세요(부장, 차장, 과장, 대리, 사원");
+                w[n - 1].pos = Console.ReadLine();
+                Console.Write("근무 부서를 입력하세요 (영업부, 구매부, 물류부, 생산부, 총무부");
+                w[n - 1].depart = Console.ReadLine();
+                Console.Write("근무 년수를 입력하세요");
+                w[n - 1].workyear = int.Parse(Console.ReadLine());
+                Console.Write("초과 근무 시간을 입력해 주세요");
+                w[n - 1].overtime = int.Parse(Console.ReadLine());
+            }
+            else
+            {
+                Console.WriteLine("사원 번호는 1~30번을 사용하세요");
+            }
         }
         // 사원 직급 수정
         static void ChangePos(worker[] w)
