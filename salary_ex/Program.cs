@@ -21,9 +21,9 @@
             {
                 Console.Write("이름을 입력하세요");
                 w[n = 1].name = Console.ReadLine();
-                Console.Write("직급을 입력 하세요(부장, 차장, 과장, 대리, 사원");
+                Console.Write("직급을 입력 하세요(부장, 차장, 과장, 대리, 사원)");
                 w[n - 1].pos = Console.ReadLine();
-                Console.Write("근무 부서를 입력하세요 (영업부, 구매부, 물류부, 생산부, 총무부");
+                Console.Write("근무 부서를 입력하세요 (영업부, 구매부, 물류부, 생산부, 총무부)");
                 w[n - 1].depart = Console.ReadLine();
                 Console.Write("근무 년수를 입력하세요");
                 w[n - 1].workyear = int.Parse(Console.ReadLine());
@@ -38,12 +38,31 @@
         // 사원 직급 수정
         static void ChangePos(worker[] w)
         {
-
+            Console.WriteLine("현재 사원 직급");
+            for (int i = 0; i < 30; i++)
+            {
+                if (w[i].name != null) // 기존 사원 번호와 직급을 보여준다
+                {
+                    Console.WriteLine("{0}:{1}:{2}", i + 1, w[i].name, w[i].pos);
+                }
+            }
+            Console.Write("직급을 수정할 사원 번호를 입력하세요 (1~30)");
+            int n = int.Parse(Console.ReadLine());
+            if (0 < n && n < 30) // 사번 에러 체크
+            {
+                Console.Write("새로운 직급을 입력하세요");
+                string newpos = Console.ReadLine();
+                w[n - 1].pos = newpos; // 지정한 사원의 직급을 수정한다
+            }
+            else
+            {
+                Console.WriteLine("사원 번호는 1~30을 사용하세요");
+            }
         }
         // 사원 근무 부서 수정
         static void ChangeDepart(worker[] w)
         {
-        
+            
         }
         // 사원 근무 년수 수정
         static void ChangeWorkeyear(worker[] w)
