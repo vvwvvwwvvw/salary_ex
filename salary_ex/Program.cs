@@ -1,4 +1,6 @@
-﻿namespace salary_ex
+﻿using System.Collections;
+
+namespace salary_ex
 {
     // 인사 관리 정보
     struct worker
@@ -39,7 +41,7 @@
         static void ChangePos(worker[] w)
         {
             Console.WriteLine("현재 사원 직급");
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 31; i++)
             {
                 if (w[i].name != null) // 기존 사원 번호와 직급을 보여준다
                 {
@@ -70,9 +72,9 @@
                     Console.WriteLine("{0}:{1}:{2}", i + 1, w[i].name, w[i].depart);
                 }
             }
-            Console.Write("수정할 사원의; 사원번호를 입력하세요");
+            Console.Write("수정할 사원의; 사원번호를 입력하세요(1~30)");
             int n = int.Parse(Console.ReadLine());
-            if(0<n && n < 30)
+            if (0 < n && n < 31)
             {
                 Console.Write("새로운 부서를 입력하세요");
                 string newdepart = Console.ReadLine();
@@ -86,81 +88,166 @@
         // 사원 근무 년수 수정
         static void ChangeWorkeyear(worker[] w)
         {
-
-        }
-        // 사원 초과 근무 수정
-        static void ChangeOvertime(worker[] w)
-        {
-
-        }
-        // 사원 직급 명세서 출력
-        static void PrintPaymentList(worker[] w)
-        {
-
-        }
-        // 부서별 총 급여액 출력
-        static void PrintDepartPayment(worker[] w)
-        {
-
-        }
-        static void Main(string[] args)
-        {
-            worker[] data = new worker[30];
-            while (true)
+            Console.WriteLine("현재 사원 근무 년수");
+            for (int i = 0; i < 30; i++)
             {
-                Console.WriteLine("# 1 = 신규둥록, 2 = 직급 수정, 3 = 부서 수정, 4 = 근무 년수 수정, 5 = 초과 근무 수정 #");
-                Console.WriteLine("# 6 = 급여 명세서 출력, 7 = 부서별 급여 총액 분석, 0 = 프로그램 종료 #");
-                Console.Write("원하는 작업을 선택하세요 -->");
-                int command = int.Parse(Console.ReadLine());
-                if (command == 0)
+                if (w[i].name != null)
                 {
-                    break;
+                    Console.WriteLine("{0}:{1}:{2}", i + 1, w[i].name, w[i].workyear);
                 }
-                Console.WriteLine();
-                switch (command)
+            }
+            Console.Write("수정할 사원번호를 입력하세요 (1~30)");
+            int n = int.Parse(Console.ReadLine());
+            if (0 < n && n < 31)
+            {
+                Console.Write("새로운 근무 년수를 입력하세요");
+                int newworkyear = int.Parse(Console.ReadLine());
+                w[n - 1].workyear = newworkyear; // 선택한 사원 근무 년수 변경
+            }
+            else
+            {
+                Console.WriteLine("사원번호는 1~30번을 사용하세요");
+            }
+            // 사원 초과 근무 수정
+            static void ChangeOvertime(worker[] w)
+            {
+                Console.WriteLine("현재 사원의 초과근무");
+                for (int i = 0; i < 30; ++i)
                 {
-                    case 1:
+                    if (w[i].name != null)
+                    {
+                        Console.WriteLine("{0},{1},{2}", i + 1, w[i].name, w[i].overtime);
+                    }
+                }
+                Console.Write("수정할 사원 번호를 입력 하세요(1~30)");
+                int n = int.Parse(Console.ReadLine());
+                if (0 < n && n < 31)
+                {
+                    Console.Write("새로운 초과 근무 시간을 입력하세요");
+                    int newovertime = int.Parse(Console.ReadLine());
+                    w[n - 1].overtime = newovertime;
+                }
+                else
+                {
+                    Console.WriteLine("사원번호는 1~30번을 사용하세요");
+                }
+            }
+            // 사원 직급 명세서 출력
+            static void PrintPaymentList(worker[] w)
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    if (w[i].name != null)
+                    {
+                        w[i].totalpay = 0;
+                        if (w[i].pos == "부장")
                         {
-                            AddWorker(data);
-                            Console.WriteLine();
+                            w[i].totalpay = 200 + w[i].workyear * 5 + w[i].overtime * 4;
+                        }
+                        else if (w[i].pos == "차장")
+                        {
+                            w[i].totalpay = 180 + w[i].workyear * 4 + w[i].overtime * 4;
+                        }
+                        else if (w[i].pos == "과장")
+                        {
+                            w[i].totalpay = 160 + w[i].workyear * 3 + w[i].overtime * 4;
+                        }
+                        else if (w[i].pos == "대리")
+                        {
+                            w[i].totalpay = 150 + w[i].workyear * 2 + w[i].overtime * 4;
+                        }
+                        else
+                        {
+                            w[i].totalpay = 130 + w[i].workyear * 1 + w[i].overtime * 4;
+                        }
+                    }
+                }
+                // 부서별 총 급여액 출력
+                static void PrintDepartPayment(worker[] w)
+                {
+                    Hashtable summary = new Hashtable();
+                    for (int i = 0; i < 30; i++)
+                    {
+                        if (w[i].name != null)
+                        {
+                            string key = w[i].depart;
+                            if (summary.ContainsKey(key))
+                            {
+                                summary[key] = (int)summary[key] + w[i].totalpay;
+                            }
+                            else
+                            {
+                                summary.Add(key, w[i].totalpay);
+                            }
+                        }
+                        foreach (DictionaryEntry cs in summary)
+                        {
+                            string depart = (string)cs.Key;
+                            int totalpay = (int)cs.Value;
+                            Console.WriteLine("{0}부서 총급여액 = {1}", depart, totalpay);
+                        }
+                    }
+                }
+                static void Main(string[] args)
+                {
+                    worker[] data = new worker[30];
+                    while (true)
+                    {
+                        Console.WriteLine("# 1 = 신규둥록, 2 = 직급 수정, 3 = 부서 수정, 4 = 근무 년수 수정, 5 = 초과 근무 수정 #");
+                        Console.WriteLine("# 6 = 급여 명세서 출력, 7 = 부서별 급여 총액 분석, 0 = 프로그램 종료 #");
+                        Console.Write("원하는 작업을 선택하세요 -->");
+                        int command = int.Parse(Console.ReadLine());
+                        if (command == 0)
+                        {
                             break;
                         }
-                    case 2:
+                        Console.WriteLine();
+                        switch (command)
                         {
-                            ChangePos(data);
-                            Console.WriteLine();
-                            break;
+                            case 1:
+                                {
+                                    AddWorker(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    ChangePos(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    ChangeDepart(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    ChangeWorkeyear(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
+                            case 5:
+                                {
+                                    ChangeOvertime(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
+                            case 6:
+                                {
+                                    PrintPaymentList(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
+                            case 7:
+                                {
+                                    PrintDepartPayment(data);
+                                    Console.WriteLine();
+                                    break;
+                                }
                         }
-                    case 3:
-                        {
-                            ChangeDepart(data);
-                            Console.WriteLine();
-                            break;
-                        }
-                    case 4:
-                        {
-                            ChangeWorkeyear(data);
-                            Console.WriteLine();
-                            break;
-                        }
-                    case 5:
-                        {
-                            ChangeOvertime(data);
-                            Console.WriteLine();
-                            break;
-                        }
-                    case 6:
-                        {
-                            PrintPaymentList(data);
-                            Console.WriteLine();
-                            break;
-                        }
-                    case 7:
-                        {
-                            PrintDepartPayment(data);
-                            Console.WriteLine();
-                            break;
-                        }
+                    }
                 }
             }
         }
